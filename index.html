@@ -1,0 +1,1505 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>For You 💖</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+<style>
+/* ===== GLOBAL ===== */
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  height:100vh;
+  font-family:Poppins,sans-serif;
+  overflow:hidden;
+  background:#0f1020;
+  color:#fff;
+}
+
+/* ===== SCREEN SYSTEM ===== */
+.screen{
+  position:fixed;
+  inset:0;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  text-align:center;
+  padding:24px;
+
+  opacity:0;
+  pointer-events:none;
+  transition:opacity .6s ease;
+}
+
+.screen.active{
+  opacity:1;
+  pointer-events:auto;
+}
+
+/* ===== HEADINGS ===== */
+h1{
+  font-family:"Dancing Script", cursive;
+  font-size:3rem;
+  color:#fff;
+  text-shadow:0 6px 20px rgba(0,0,0,.35);
+}
+
+/* ===== PARAGRAPHS ===== */
+p, li{
+  font-family:Poppins,sans-serif;
+  font-size:1.05rem;
+  color:#f3f3f3;
+}
+
+/* ===== BUTTON ===== */
+button{
+  margin-top:28px;
+  padding:14px 36px;
+  border-radius:50px;
+  border:none;
+  background:linear-gradient(135deg,#ff6fae,#8b5cf6);
+  color:#fff;
+  font-size:1rem;
+  font-weight:600;
+  cursor:pointer;
+  box-shadow:0 12px 30px rgba(0,0,0,.3);
+}
+
+/* ===== BACKGROUND THEMES ===== */
+#s0{ background:radial-gradient(circle at top,#1a1b3a,#0f1020); }
+#s1{ background:linear-gradient(135deg,#1d2671,#c33764); }
+#s2{ background:linear-gradient(135deg,#42275a,#734b6d); }
+#s3{ background:radial-gradient(circle,#ff9a9e,#fad0c4); }
+#s4{ background:linear-gradient(135deg,#ff758c,#ff7eb3); }
+
+#s5{ background:linear-gradient(135deg,#141e30,#243b55); }
+#s6{ background:linear-gradient(135deg,#000428,#004e92); }
+#s7{ background:linear-gradient(135deg,#2c3e50,#4ca1af); }
+
+/* ===== FINAL SLIDES ===== */
+#s20, #s21, #s22, #s23{
+  background:linear-gradient(135deg,#0f2027,#203a43,#2c5364);
+}
+
+/* ===== CONFETTI ===== */
+.confetti{
+  position:fixed;
+  top:-10px;
+  width:10px;
+  height:14px;
+  opacity:1;
+  animation:confettiFall linear forwards;
+  z-index:9999;
+}
+
+@keyframes confettiFall{
+  to{
+    transform:translateY(110vh) rotate(720deg);
+    opacity:0;
+  }
+}
+
+/* ===== FIREWORK PARTICLES ===== */
+.fire{
+  position:fixed;
+  width:8px;
+  height:8px;
+  border-radius:50%;
+  animation:fireBoom 1.4s ease-out forwards;
+  z-index:9999;
+}
+
+@keyframes fireBoom{
+  to{
+    transform:translate(var(--x),var(--y)) scale(0);
+    opacity:0;
+  }
+}
+
+/* ===== ROCKET ===== */
+.rocket{
+  position:fixed;
+  bottom:-30px;
+  width:6px;
+  height:24px;
+  background:white;
+  border-radius:3px;
+  animation:rocketLaunch 1s ease-out forwards;
+  z-index:9999;
+}
+
+@keyframes rocketLaunch{
+  to{
+    transform:translateY(-75vh);
+  }
+}
+
+/* ===== ROCKET SPARKS ===== */
+.spark{
+  position:fixed;
+  width:6px;
+  height:6px;
+  border-radius:50%;
+  animation:sparkExplode 1.4s ease-out forwards;
+  z-index:9999;
+}
+
+@keyframes sparkExplode{
+  to{
+    transform:translate(var(--x),var(--y)) scale(0);
+    opacity:0;
+  }
+}
+
+/* ===== CONTENT BOX ===== */
+.card{
+  background:rgba(255,255,255,.14);
+  backdrop-filter: blur(10px);   /* ✅ FIXED */
+  -webkit-backdrop-filter: blur(10px);
+  border-radius:26px;
+  padding:30px;
+  max-width:460px;
+  width:100%;
+  box-shadow:0 25px 60px rgba(0,0,0,.35);
+  border:1px solid rgba(255,255,255,.25);
+}
+
+.card h2{
+  font-family:"Dancing Script";
+  font-size:2.3rem;
+  margin-bottom:12px;
+  color:#ffd166;
+}
+
+.card ul{
+  padding-left:18px;
+  margin-top:12px;
+}
+
+.card li{
+  margin-bottom:8px;
+}
+
+/* ===== GAME EMOJIS ===== */
+.game-emoji{
+  position:absolute;                 /* 🔥 WAS fixed */
+  font-size:48px;
+  cursor:pointer;
+  user-select:none;
+  left:0;
+  bottom:-80px;
+  animation:emojiFloat 4s linear forwards;
+  z-index:9999;
+}
+
+@keyframes emojiFloat{
+  from{
+    transform:translateY(0);
+    opacity:1;
+  }
+  to{
+    transform:translateY(-120vh);
+    opacity:1;
+  }
+}
+
+#s6{
+  position:relative;  
+  overflow:hidden;
+}
+
+#s6 .card{
+  position:relative;
+  z-index:2;
+}
+
+.game-emoji{
+  z-index:5;
+}
+
+/* POP EFFECT */
+.pop{
+  animation:emojiPop .35s ease-out forwards;
+}
+
+@keyframes emojiPop{
+  0%{ transform:scale(1); opacity:1; }
+  70%{ transform:scale(1.4); opacity:.9; }
+  100%{ transform:scale(0); opacity:0; }
+}
+
+/* ===== LOADING SPINNER ===== */
+.loader{
+  width:64px;
+  height:64px;
+  border:6px solid #ffd1dc;
+  border-top:6px solid #ff6fae;
+  border-radius:50%;
+  animation:spin 1s linear infinite;
+  margin:18px auto;
+}
+
+@keyframes spin{
+  to{transform:rotate(360deg)}
+}
+
+.loading-text{
+  font-size:1rem;
+  margin-top:10px;
+  opacity:.8;
+}
+
+/* ================= BALLOON GAME ================= */
+
+#s14{
+  overflow:hidden;
+}
+
+.balloon{
+  position:absolute;
+  min-width:90px;
+  padding:14px 16px;
+  border-radius:50% 50% 45% 45%;
+  background:linear-gradient(135deg,#ff9a9e,#fad0c4);
+  color:#fff;
+  font-weight:600;
+  text-align:center;
+  cursor:pointer;
+  box-shadow:0 12px 30px rgba(0,0,0,.35);
+  animation:balloonFloat 4s ease-in-out infinite;
+  user-select:none;
+}
+
+.balloon::after{
+  content:"";
+  position:absolute;
+  bottom:-18px;
+  left:50%;
+  width:2px;
+  height:18px;
+  background:#fff;
+  transform:translateX(-50%);
+  opacity:.7;
+}
+
+@keyframes balloonFloat{
+  0%{ transform:translateY(0); }
+  50%{ transform:translateY(-18px); }
+  100%{ transform:translateY(0); }
+}
+
+/* COLLECTION BOX */
+#collectionBox{
+  position:fixed;
+  bottom:22px;
+  left:50%;
+  transform:translateX(-50%);
+  background:rgba(0,0,0,.45);
+  backdrop-filter:blur(8px);
+  border-radius:20px;
+  padding:14px 24px;
+  text-align:center;
+  box-shadow:0 12px 35px rgba(0,0,0,.4);
+  z-index:5;
+}
+
+#collectionBox div:first-child{
+  font-weight:600;
+  font-size:1rem;
+}
+
+#collectionBox div:last-child{
+  margin-top:6px;
+  font-size:.95rem;
+  opacity:.85;
+}
+
+/* ================= BUBBLE GAME ================= */
+
+#s17{
+  overflow:hidden;
+}
+
+/* NEGATIVITY BOX */
+#negBox{
+  position:fixed;
+  top:20px;
+  left:50%;
+  transform:translateX(-50%);
+  background:rgba(0,0,0,.45);
+  backdrop-filter:blur(8px);
+  border-radius:20px;
+  padding:14px 26px;
+  text-align:center;
+  box-shadow:0 12px 35px rgba(0,0,0,.4);
+  z-index:10;
+}
+
+#negBox div:first-child{
+  font-weight:600;
+}
+
+#negBox div:last-child{
+  margin-top:6px;
+  font-size:1.1rem;
+  color:#ffd166;
+}
+
+/* BUBBLE LAYER */
+#bubbleLayer{
+  position:fixed;
+  inset:0;
+  z-index:2;
+}
+
+/* INDIVIDUAL BUBBLES */
+.bubble{
+  position:absolute;
+  min-width:110px;
+  padding:14px 18px;
+  border-radius:50%;
+  background:rgba(255,255,255,.25);
+  backdrop-filter:blur(6px);
+  border:1px solid rgba(255,255,255,.35);
+  color:#fff;
+  font-size:.95rem;
+  text-align:center;
+  cursor:pointer;
+  box-shadow:0 10px 25px rgba(0,0,0,.3);
+  animation:bubbleFloat 6s ease-in-out infinite;
+  user-select:none;
+}
+
+@keyframes bubbleFloat{
+  0%{ transform:translateY(0); }
+  50%{ transform:translateY(-22px); }
+  100%{ transform:translateY(0); }
+}
+
+/* BUBBLE POP */
+.bubble.pop{
+  animation:bubblePop .3s ease-out forwards;
+}
+
+@keyframes bubblePop{
+  0%{ transform:scale(1); opacity:1; }
+  70%{ transform:scale(1.3); opacity:.8; }
+  100%{ transform:scale(0); opacity:0; }
+}
+
+/* ================= REFLECTION SCREEN ================= */
+
+#s18{
+  background:radial-gradient(circle at top,#1b1c3a,#0f1020);
+}
+
+/* soft glow behind content */
+#s18::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:
+    radial-gradient(circle at center,
+      rgba(255,255,255,.08),
+      transparent 60%);
+  pointer-events:none;
+}
+
+/* heading styling */
+#s18 h1{
+  font-size:2.9rem;
+  margin-bottom:18px;
+  color:#ffd1dc;
+  text-shadow:
+    0 8px 25px rgba(0,0,0,.45);
+}
+
+/* paragraph styling */
+#s18 p{
+  max-width:440px;
+  font-size:1.15rem;
+  line-height:1.7;
+  color:#f4f4f4;
+  opacity:.95;
+}
+
+/* optional subtle floating animation */
+#s18 h1,
+#s18 p{
+  animation:softFloat 5s ease-in-out infinite;
+}
+
+@keyframes softFloat{
+  0%{ transform:translateY(0); }
+  50%{ transform:translateY(-10px); }
+  100%{ transform:translateY(0); }
+}
+
+/* ================= CONTINUE WHEN READY BUTTON ================= */
+
+.ready-btn{
+  margin-top:32px;
+  padding:14px 42px;
+  border-radius:50px;
+  border:2px solid rgba(255,255,255,.35);
+  background:rgba(255,255,255,.08);
+  color:#ffd1dc;
+  font-size:1rem;
+  font-weight:600;
+  cursor:pointer;
+  letter-spacing:.5px;
+
+  backdrop-filter:blur(8px);
+  -webkit-backdrop-filter:blur(8px);
+
+  box-shadow:
+    0 10px 30px rgba(0,0,0,.35),
+    inset 0 0 0 rgba(255,255,255,0);
+
+  animation:readyPulse 2.8s ease-in-out infinite;
+  transition:all .35s ease;
+}
+
+.ready-btn:hover{
+  background:rgba(255,255,255,.18);
+  transform:translateY(-3px);
+  box-shadow:
+    0 18px 45px rgba(0,0,0,.45),
+    inset 0 0 20px rgba(255,255,255,.2);
+}
+
+@keyframes readyPulse{
+  0%{
+    box-shadow:0 0 0 0 rgba(255,209,220,.25);
+  }
+  70%{
+    box-shadow:0 0 0 18px rgba(255,209,220,0);
+  }
+  100%{
+    box-shadow:0 0 0 0 rgba(255,209,220,0);
+  }
+}
+</style>
+</head>
+
+<body>
+
+<!-- ================= ENTRY SCREEN ================= -->
+<div id="s0" class="screen active">
+  <h1>Hey You ✨</h1>
+  <p>
+    Tap to begin<br>
+    a small surprise<br>
+    made just for you 💖
+  </p>
+  <button onclick="go('s1')">Tap to Begin ✨</button>
+</div>
+
+<!-- ================= SCREEN 1 (PLACEHOLDER) ================= -->
+<!-- ================= SCREEN 1 ================= -->
+<div id="s1" class="screen">
+  <h1>18th January… 🎈</h1>
+
+  <p style="margin-top:14px">
+    Today is a little special…
+  </p>
+
+  <p style="margin-top:10px">
+    It’s the birthday of<br>
+    <b>someone very special</b> 💖
+  </p>
+
+  <p style="margin-top:10px">
+    But who is that<br>
+    special person? 🤔✨
+  </p>
+
+  <button onclick="go('s2')">Let’s find out →</button>
+</div>
+
+<!-- ================= SCREEN 2 ================= -->
+<div id="s2" class="screen">
+  <h1>Ohhh… 🎆</h1>
+
+  <p style="margin-top:14px">
+    The special person is
+  </p>
+
+  <p style="margin-top:10px; font-size:1.2rem">
+    <b>none other than</b><br>
+    <span style="color:var(--gold); font-weight:600">
+      the cutest girl of the universe 💖
+    </span>
+  </p>
+
+  <button onclick="go('s3')">Next ✨</button>
+</div>
+
+<!-- ================= SCREEN 3 : BIRTHDAY ================= -->
+<div id="s3" class="screen">
+  <h1 style="font-size:3.2rem">
+    HAPPY BIRTHDAY<br>
+    <span style="color:var(--gold)">SANVI</span> 🎂💖
+  </h1>
+
+  <p style="margin-top:14px; opacity:.9">
+    Today is all about you ✨
+  </p>
+
+  <button onclick="go('s4')">Next 💫</button>
+</div>
+
+<!-- ================= SCREEN 4 : SMILE MESSAGE ================= -->
+<div id="s4" class="screen">
+  <h1 style="font-size:2.6rem">😄 Just One Thing…</h1>
+
+  <p style="margin-top:18px; font-size:1.15rem; line-height:1.7">
+    This code was made just to make you smile…<br><br>
+    Let’s see —<br>
+    will you smile in the end 😌<br>
+    or be bored 😜
+  </p>
+
+  <button onclick="go('s5')">Let’s continue ✨</button>
+</div>
+
+<!-- ================= SCREEN 5 : GAME 1 INSTRUCTIONS ================= -->
+<div id="s5" class="screen">
+  <div class="card">
+
+    <h2>🎮 First Game Time</h2>
+
+    <p>
+      You will see many different emojis floating on the next screen.<br>
+      Your task is to tap and pop <b>ONLY birthday-related emojis</b>.
+    </p>
+
+    <p><b>Rules:</b></p>
+    <ul>
+      <li>Pop only 🎂 🎉 🎈 🎁 🥳 🍰</li>
+      <li>Pop <b>8 correct emojis in a row</b></li>
+      <li>Wrong emoji = OUT</li>
+      <li>⏱ 30 seconds only</li>
+    </ul>
+
+    <button onclick="go('s6')">Start Game 🎯</button>
+
+  </div>
+</div> 
+
+<!-- ================= SCREEN 6 : GAME 1 PLAY ================= -->
+<div id="s6" class="screen game-area">
+  <div class="card" style="background:rgba(0,0,0,.35)">
+  <h2>🎯 Birthday Emoji Challenge</h2>
+
+  <p>
+    Pop only birthday emojis<br>
+    🎂 🎉 🎈 🎁 🥳 🍰
+  </p>
+
+  <p style="margin-top:12px">
+    ⏱ Time: <b><span id="g1time">30</span>s</b> &nbsp; | &nbsp;
+    ✅ In a row: <b><span id="g1score">0</span>/8</b>
+  </p>
+
+  <p style="opacity:.75;margin-top:6px">
+    One wrong emoji = OUT
+  </p>
+</div>
+</div>
+
+<!-- ================= SCREEN 7 : GAME 1 RESULT ================= -->
+<div id="s7" class="screen">
+  <div class="card">
+    <h2 id="g1ResultTitle">🎉</h2>
+    <p id="g1ResultText"></p>
+    <button id="g1ResultBtn">Next ✨</button>
+  </div>
+</div>
+
+<!-- ================= SCREEN 8 : QUESTION AFTER GAME ================= -->
+<div id="s8" class="screen">
+  <div class="card">
+
+    <h2>💭 Question</h2>
+
+    <p style="margin-top:10px">
+      Birthday hai toh banta hai 😌<br><br>
+      Apni life ke <b>17th year</b> ke liye<br>
+      koi resolutions banaye hai?<br>
+      <b>Ya phir no rules?</b> ✨
+    </p>
+
+    <input
+      id="q2answer"
+      placeholder="Sach sach batana… 💖"
+      style="
+        width:100%;
+        padding:14px;
+        border-radius:16px;
+        border:none;
+        margin-top:18px;
+        font-size:1rem;
+        outline:none;
+      "
+    >
+
+    <button onclick="submitQ2()">Save & Continue ✨</button>
+
+  </div>
+</div>
+
+<!-- ================= SCREEN 9 : SERIOUS SETUP ================= -->
+<div id="s9" class="screen">
+  <div class="card">
+    <h2>Ek baat batata hu… 💭</h2>
+
+    <p style="margin-top:10px">
+      Woh ek baat jo tumne<br>
+      mujhe ek baar boli thi…<br><br>
+      Sach bolu toh,<br>
+      <b>mujhe kaafi hurt kiya tha</b> 😔
+    </p>
+
+    <button onclick="glitchToLoading()">Haa batao</button>
+  </div>
+</div>
+
+<!-- ================= SCREEN 10 : FAKE LOADING ================= -->
+<div id="s10" class="screen">
+  <div class="card">
+
+    <h2>Please wait…</h2>
+
+    <div class="loader"></div>
+
+    <div class="loading-text" id="loadingMsg">
+      Error… loading…<br>
+      please try again 😐
+    </div>
+
+    <button onclick="fakeLoad()">Try again 🔄</button>
+
+  </div>
+</div>
+
+<!-- ================= SCREEN 11 : REVEAL ================= -->
+<div id="s11" class="screen">
+  <div class="card">
+    <h2>😂😂😂</h2>
+
+    <p style="margin-top:12px">
+      Honestly yaar…<br><br>
+      <b>Kisi baat se hurt toh nahi hua tha</b> 😌<br><br>
+      Par tumhari woh <b>curiosity aur serious face</b> dekh ke<br>
+      mujhe bohot hasi aa rahi hai 🤭😂
+    </p>
+
+    <p style="margin-top:14px">
+      Aur waise<br>
+      <b>Patience level cleared ✔️</b> 💯
+    </p>
+
+    <button onclick="go('s12')">Aage chale? ✨</button>
+  </div>
+</div>
+
+<!-- ================= SCREEN 12 : SERIOUS QUESTION ================= -->
+<div id="s12" class="screen">
+  <div class="card">
+
+    <h2>Question</h2>
+
+    <p style="margin-top:10px">
+      Ab serious mode mein aa hi gaye the toh
+    </p>
+
+    <p style="margin-top:10px">
+      seriously ek question ka answer bhi de do…
+    </p>
+
+    <p style="margin-top:12px">
+      <b>PU ke baad ka future plan</b><br>
+      sorted hai
+    </p>
+
+    <p style="margin-top:6px">
+      ya phir<br>
+      <b>“time aane par dekhenge”</b><br>
+      wala mode ON hai?
+    </p>
+
+    <input
+      id="qSerious"
+      placeholder="Dil se likho… 💭"
+      style="
+        width:100%;
+        padding:15px;
+        border-radius:18px;
+        border:2px solid #ffd1dc;
+        margin-top:18px;
+        font-size:1rem;
+        outline:none;
+      "
+    >
+
+    <button onclick="submitSerious()">Save & Continue ✨</button>
+
+  </div>
+</div>
+
+<!-- ================= SCREEN 13 : BALLOON GAME INTRO ================= -->
+<div id="s13" class="screen">
+  <div class="card">
+
+    <h2>Next Game 🎈</h2>
+
+    <p style="margin-top:12px">
+      On the next screen, you’ll see<br>
+      some balloons floating around ✨
+    </p>
+
+    <p style="margin-top:10px">
+      Each balloon carries something<br>
+      you should take forward<br>
+      into your <b>17th year</b> 💖
+    </p>
+
+    <p style="margin-top:10px">
+      Collect all balloons to move ahead.
+    </p>
+
+    <button onclick="go('s14'); startBalloonGame();">OK 😊</button>
+
+  </div>
+</div>
+
+<!-- ================= SCREEN 14 : BALLOON GAME ================= -->
+<div id="s14" class="screen">
+
+  <h1>🎈 Carry Forward</h1>
+
+  <p style="margin-bottom:8px">
+    Collect all balloons<br>
+    to enter Sanvi’s 17th year ✨
+  </p>
+
+  <!-- COLLECTION BOX -->
+  <div id="collectionBox">
+    <div>🎂 Sanvi’s 17th Year</div>
+    <div id="collectedCount">0 / 6</div>
+  </div>
+
+</div>
+
+<!-- ================= SCREEN 15 : BALLOON SUCCESS ================= -->
+<div id="s15" class="screen">
+  <div class="card">
+
+    <h2>✨ Well Done ✨</h2>
+
+    <p style="margin-top:12px">
+      You’ve successfully carried<br>
+      all the good things forward 💖
+    </p>
+
+    <p style="margin-top:10px">
+      Welcome to your<br>
+      <b>17th year of life</b> 🎂
+    </p>
+
+    <button onclick="go('s16')">Continue ➜</button>
+
+  </div>
+</div>
+
+<!-- ================= SCREEN 16 : BUBBLE INTRO ================= -->
+<div id="s16" class="screen">
+
+  <div style="position:relative; z-index:5">
+    <h1>🫧 Let go of what hurts</h1>
+
+    <p style="max-width:420px">
+      Ab achi cheezon ko carry kar liya hai 💖<br>
+      Ab thodi unnecessary cheezon ko<br>
+      life se remove bhi kar do.
+    </p>
+
+    <button onclick="go('s17'); startBubbleGame();">
+      Let’s clean it 🫶
+    </button>
+  </div>
+
+</div>
+
+<!-- ================= SCREEN 17 : BUBBLE GAME ================= -->
+<div id="s17" class="screen">
+
+  <div id="negBox">
+    <div>Negativity in Sanvi’s mind</div>
+    <div id="negValue">100%</div>
+  </div>
+
+  <div id="bubbleLayer"></div>
+
+</div>
+
+<div id="s18" class="screen">
+  <h1>🤍 Ab Thoda socho…</h1>
+
+  <p>
+    Ab tak k life ka safar yaad karo…<br>
+    Aur jo aage ka safar hai… uske liye ready ho jao.
+  </p>
+  <button class="ready-btn" onclick="go('s20')">
+  Continue when ready 🤍
+</button>
+</div>
+
+<!-- ================= SCREEN 20 : FINAL MESSAGE SLIDES ================= -->
+<div id="s20" class="screen">
+  <div class="card" style="max-width:520px">
+    <h2 id="slideTitle">🤍</h2>
+
+    <p id="slideText" style="margin-top:14px; font-size:1.1rem"></p>
+
+    <button id="slideNextBtn" onclick="nextSlide()">Next ✨</button>
+  </div>
+</div>
+
+<!-- ================= SCREEN 21 : FEEDBACK ================= -->
+<div id="s21" class="screen">
+  <div class="card">
+    <h2>💭 Ek honest question…</h2>
+
+    <p style="margin-top:12px">
+      Ab sab dekhne ke baad,<br>
+      sach sach bataana…
+    </p>
+
+    <p style="margin-top:10px">
+      <b>Did you like this?</b>
+    </p>
+
+    <input
+      id="qFeedback"
+      placeholder="Dil se likho… 💖"
+      style="
+        width:100%;
+        padding:14px;
+        border-radius:16px;
+        border:none;
+        margin-top:18px;
+        font-size:1rem;
+        outline:none;
+      "
+    >
+
+    <button onclick="submitFeedback()">Next ✨</button>
+  </div>
+</div>
+
+<!-- ================= SCREEN 22 : APOLOGY ================= -->
+<div id="s22" class="screen">
+  <div class="card">
+    <h2>🤍 Ek last baat…</h2>
+
+    <p style="margin-top:12px">
+      Agar kahin par bhi<br>
+      koi cheez galat lagi ho…
+    </p>
+
+    <p style="margin-top:10px">
+      Ya agar kabhi maine<br>
+      baaton mein, tone mein,<br>
+      ya kisi bhi tareeke se<br>
+      tujhe hurt kiya ho…
+    </p>
+
+    <p style="margin-top:10px">
+      <b>I’m really sorry.</b><br>
+      Please forgive me 🤍
+    </p>
+
+    <button onclick="go('s23')">🤍</button>
+  </div>
+</div>
+
+<!-- ================= SCREEN 23 : FINAL CELEBRATION ================= -->
+<div id="s23" class="screen">
+  <div class="card">
+    <h2>🎂 Once Again…</h2>
+
+    <p style="margin-top:12px">
+      Happy 17th Birthday Sanvi 🤍<br><br>
+      I hope this made you smile<br>
+      at least a little today.
+    </p>
+
+    <p style="margin-top:12px; opacity:.85">
+      Always stay the way you are ✨
+    </p>
+  </div>
+</div>
+<script>
+/* ===== SCREEN NAVIGATION ===== */
+let screens = document.querySelectorAll(".screen");
+let locked = false;
+
+function go(id){
+  if(locked) return;
+
+  screens.forEach(s => s.classList.remove("active"));
+
+  const target = document.getElementById(id);
+  if(!target){
+    console.error("Screen not found:", id);
+    return;
+  }
+
+  target.classList.add("active");
+
+  /* EXISTING TRIGGERS */
+  if(id === "s2"){
+    smallFireworks();
+  }
+
+  if(id === "s3"){
+    bigCelebration();
+  }
+
+  if(id === "s6"){
+    startGame1();
+  }
+
+  if(id === "s20"){
+    slideIndex = 0;
+    showSlide();
+  }
+
+  /* ✅ FINAL CELEBRATION FIX */
+  if(id === "s23"){
+    setTimeout(()=>{
+      bigCelebration();   // fireworks + confetti
+      rocketShow();       // rockets
+    }, 300);
+  }
+}
+
+function smallFireworks(){
+  for(let i=0;i<30;i++){
+    const f=document.createElement("div");
+    f.className="fire";
+    f.style.background=["#ff6fae","#ffd166","#fff"][Math.random()*3|0];
+    f.style.left=Math.random()*100+"vw";
+    f.style.top=Math.random()*50+"vh";
+    f.style.setProperty("--x",(Math.random()-0.5)*200+"px");
+    f.style.setProperty("--y",(Math.random()-0.5)*200+"px");
+    document.body.appendChild(f);
+    setTimeout(()=>f.remove(),1200);
+  }
+}
+
+function bigCelebration(){
+  // CONFETTI
+  for(let i=0;i<200;i++){
+    const c=document.createElement("div");
+    c.className="confetti";
+    c.style.left=Math.random()*100+"vw";
+    c.style.background=["#ff6fae","#ffd166","#a8e6cf","#ffffff"][Math.random()*4|0];
+    c.style.animationDuration=3+Math.random()*2+"s";
+    document.body.appendChild(c);
+    setTimeout(()=>c.remove(),6000);
+  }
+
+  // FIREWORKS
+  for(let i=0;i<140;i++){
+    const f=document.createElement("div");
+    f.className="fire";
+    f.style.background=["#ff6fae","#ffd166","#fff","#a8e6cf"][Math.random()*4|0];
+    f.style.left="50vw";
+    f.style.top="50vh";
+    f.style.setProperty("--x",(Math.random()-0.5)*900+"px");
+    f.style.setProperty("--y",(Math.random()-0.5)*900+"px");
+    document.body.appendChild(f);
+    setTimeout(()=>f.remove(),1800);
+  }
+
+  rocketShow();
+}
+
+function rocketShow(){
+  for(let i=0;i<18;i++){
+    setTimeout(()=>{
+      const r=document.createElement("div");
+      r.className="rocket";
+      r.style.left=Math.random()*100+"vw";
+      document.body.appendChild(r);
+
+      setTimeout(()=>{
+        const pos=r.getBoundingClientRect();
+        r.remove();
+
+        for(let j=0;j<30;j++){
+          const s=document.createElement("div");
+          s.className="spark";
+          s.style.left=pos.left+"px";
+          s.style.top=pos.top+"px";
+          s.style.background=["#ff6fae","#ffd166","#fff"][Math.random()*3|0];
+          s.style.setProperty("--x",(Math.random()-0.5)*500+"px");
+          s.style.setProperty("--y",(Math.random()-0.5)*500+"px");
+          document.body.appendChild(s);
+          setTimeout(()=>s.remove(),1600);
+        }
+      },900);
+    },i*220);
+  }
+}
+
+/* ================= GAME 1 LOGIC ================= */
+const goodEmojis = ["🎂","🎉","🎈","🎁","🥳","🍰"];
+const badEmojis  = ["🎃","🎮","💄","💍","📱","🔥","😴"];
+
+let g1Score = 0;
+let g1Time  = 30;
+let g1Timer;
+let g1Spawn;
+let game1Ended = false;
+
+function startGame1(){
+  game1Ended = false;
+  g1Score = 0;
+  g1Time  = 30;
+
+  document.getElementById("g1score").innerText = "0";
+  document.getElementById("g1time").innerText  = g1Time;
+
+  clearInterval(g1Timer);
+  clearInterval(g1Spawn);
+
+  g1Timer = setInterval(()=>{
+    g1Time--;
+    document.getElementById("g1time").innerText = g1Time;
+    if(g1Time <= 0) endGame1(false);
+  },1000);
+
+  g1Spawn = setInterval(spawnEmoji,650);
+}
+
+function spawnEmoji(){
+  const gameScreen = document.getElementById("s6");
+  if (!gameScreen.classList.contains("active")) return;
+  if (game1Ended) return;
+
+  const e = document.createElement("div");
+  const isGood = Math.random() < 0.55;
+
+  e.className = "game-emoji";
+  e.innerText = isGood
+    ? goodEmojis[Math.floor(Math.random()*goodEmojis.length)]
+    : badEmojis[Math.floor(Math.random()*badEmojis.length)];
+
+  // horizontal position
+  e.style.left = Math.random() * 85 + "%";
+
+  e.onclick = () => {
+    if(game1Ended) return;
+
+    e.classList.add("pop");
+    setTimeout(()=>e.remove(),300);
+
+    if(isGood){
+      g1Score++;
+      document.getElementById("g1score").innerText = g1Score;
+
+      if(g1Score === 4){
+        clearInterval(g1Spawn);
+        g1Spawn = setInterval(spawnEmoji,420);
+      }
+
+      if(g1Score >= 8){
+        endGame1(true);
+      }
+    }else{
+      endGame1(false);
+    }
+  };
+
+  gameScreen.appendChild(e);
+
+  setTimeout(()=>{
+    if(e.parentNode) e.remove();
+  },4200);
+}
+
+function endGame1(win){
+  if(game1Ended) return;
+  game1Ended = true;
+
+  clearInterval(g1Timer);
+  clearInterval(g1Spawn);
+
+  document.querySelectorAll(".game-emoji").forEach(e=>e.remove());
+  showGame1Result(win);
+}
+
+function showGame1Result(win){
+  const title = document.getElementById("g1ResultTitle");
+  const text  = document.getElementById("g1ResultText");
+  const btn   = document.getElementById("g1ResultBtn");
+
+  if(win){
+    title.innerText = "🎉 You did it!";
+    text.innerHTML =
+      "You popped <b>8 perfect birthday emojis</b> in a row 💖<br><br>" +
+      "That was actually impressive 😌✨";
+
+    btn.innerText = "Next 💫";
+    btn.onclick = ()=> go("s8"); // NEXT SCREEN LATER
+  }else{
+    title.innerText = "😅 Oops!";
+    text.innerHTML =
+      "That wasn’t a birthday emoji<br>or time ran out 💭";
+
+    btn.innerText = "Retry 🎯";
+    btn.onclick = ()=> go("s5");
+  }
+
+  go("s7");
+}
+
+/* ===== GOOGLE FORM CONFIG ===== */
+const FORM_URL = "https://docs.google.com/forms/d/e/XXXXXXXX/formResponse";
+const ENTRY_Q2 = "entry.1355380162";
+const ENTRY_SERIOUS = "entry.1293597749";
+const ENTRY_FEEDBACK = "entry.151751716";
+const ENTRY_GAME1_RESULT = "entry.1314990252";
+const ENTRY_GAME1_SCORE  = "entry.1419548562";
+const ENTRY_GAME1_TIME   = "entry.968397800";
+
+function submitQ2(){
+  const v = document.getElementById("q2answer").value.trim();
+
+  if(!v){
+    alert("Thoda sa likhna toh banta hai 😌");
+    return;
+  }
+
+  const fd = new FormData();
+  fd.append(ENTRY_Q2, v);
+
+  fetch(FORM_URL,{
+    method:"POST",
+    mode:"no-cors",
+    body:fd
+  });
+
+  go("s9"); 
+}
+
+/* ===== GLITCH + FAKE LOADING LOGIC ===== */
+let fakeCount = 0;
+let glitchTapped = false;
+
+function glitchToLoading(){
+  if(glitchTapped){
+    go("s10");
+    return;
+  }
+
+  glitchTapped = true;
+  locked = true;
+
+  document.body.style.filter = "blur(2px)";
+  document.body.style.transform = "scale(1.03)";
+
+  setTimeout(()=>{
+    document.body.style.filter = "none";
+    document.body.style.transform = "none";
+    locked = false;
+  },600);
+}
+
+function fakeLoad(){
+  fakeCount++;
+
+  const msg = document.getElementById("loadingMsg");
+
+  if(fakeCount === 2){
+    msg.innerHTML = "Still loading… 🤔<br>Please try again";
+  }
+  else if(fakeCount === 3){
+    msg.innerHTML = "It is getting longer… 😬<br>Try again";
+  }
+  else if(fakeCount === 4){
+    msg.innerHTML = "Almost there…<br>Just one more tap";
+  }
+  else if(fakeCount >= 5){
+    fakeCount = 0;
+    glitchTapped = false;
+    go("s11");
+  }
+}
+
+function submitSerious(){
+  const v = document.getElementById("qSerious").value.trim();
+
+  if(!v){
+    alert("Iska answer thoda important hai 😌");
+    return;
+  }
+
+  const fd = new FormData();
+  fd.append(ENTRY_SERIOUS, v);
+
+  fetch(FORM_URL, {
+    method: "POST",
+    mode: "no-cors",
+    body: fd
+  });
+
+  // move to next screen (change if needed)
+  go("s13");
+}
+
+/* ===== BALLOON GAME ===== */
+
+const balloonWords = [
+  "Confidence",
+  "Self-Love",
+  "Courage",
+  "Peace",
+  "Happiness",
+  "Growth"
+];
+
+let collected = 0;
+
+function startBalloonGame(){
+  const container = document.getElementById("s14");
+  container.querySelectorAll(".balloon").forEach(b => b.remove());
+
+  collected = 0;
+  document.getElementById("collectedCount").innerText =
+    "0 / " + balloonWords.length;
+
+  balloonWords.forEach(word => spawnBalloon(word));
+}
+
+function spawnBalloon(text){
+  const container = document.getElementById("s14");
+  const rect = container.getBoundingClientRect();
+
+  const b = document.createElement("div");
+  b.className = "balloon";
+  b.innerText = text;
+
+  const paddingTop = 160;
+  const paddingBottom = 80;
+  const paddingSide = 20;
+
+  const maxX = rect.width - 120 - paddingSide;
+  const maxY = rect.height - 220 - paddingBottom;
+
+  b.style.left = Math.random() * maxX + paddingSide + "px";
+  b.style.top  = Math.random() * maxY + paddingTop + "px";
+
+  b.onclick = () => collectBalloon(b);
+
+  container.appendChild(b);
+}
+
+function collectBalloon(balloon){
+  const box = document.getElementById("collectionBox");
+
+  const boxRect = box.getBoundingClientRect();
+  const balRect = balloon.getBoundingClientRect();
+  const parentRect = document
+    .getElementById("s14")
+    .getBoundingClientRect();
+
+  const targetLeft =
+    boxRect.left - parentRect.left +
+    boxRect.width / 2 -
+    balRect.width / 2;
+
+  const targetTop =
+    boxRect.top - parentRect.top +
+    boxRect.height / 2 -
+    balRect.height / 2;
+
+  balloon.style.left = targetLeft + "px";
+  balloon.style.top  = targetTop  + "px";
+  balloon.style.transform = "scale(0.3)";
+  balloon.style.opacity = "0.5";
+
+  setTimeout(()=>{
+    balloon.remove();
+    collected++;
+
+    document.getElementById("collectedCount").innerText =
+      collected + " / " + balloonWords.length;
+
+    if(collected === balloonWords.length){
+      setTimeout(()=>go("s15"),900);
+    }
+  },850);
+}
+
+/* ===== BUBBLE REMOVAL GAME ===== */
+
+const bubbleWords = [
+  "Overthinking",
+  "Stress",
+  "Regret",
+  "Self-Doubt",
+  "Negativity"
+];
+
+let negValue = 100;
+let popped = 0;
+
+function startBubbleGame(){
+  const layer = document.getElementById("bubbleLayer");
+  layer.innerHTML = "";
+
+  negValue = 100;
+  popped = 0;
+  document.getElementById("negValue").innerText = "100%";
+
+  bubbleWords.forEach(word => spawnBubble(word));
+}
+
+function spawnBubble(text){
+  const layer = document.getElementById("bubbleLayer");
+
+  const b = document.createElement("div");
+  b.className = "bubble";
+  b.innerText = text;
+
+  const safeTop = 180;
+  const safeBottom = 120;
+
+  b.style.left =
+    Math.random() * (window.innerWidth - 140) + 20 + "px";
+  b.style.top =
+    Math.random() * (window.innerHeight - safeTop - safeBottom)
+    + safeTop + "px";
+
+  b.onclick = () => {
+    b.classList.add("pop");
+
+    setTimeout(()=>b.remove(),300);
+
+    popped++;
+    negValue -= Math.floor(100 / bubbleWords.length);
+    document.getElementById("negValue").innerText = negValue + "%";
+
+    if(popped === bubbleWords.length){
+      setTimeout(()=>go("s18"),900);
+    }
+  };
+
+  layer.appendChild(b);
+}
+
+/* ===== FINAL SLIDES DATA ===== */
+const finalSlides = [
+  {
+    title: "🤍 Ab thoda sa ruk jao…",
+    text:
+      "Ab tak ka safar easy nahi tha.\n" +
+      "Kabhi doubt, kabhi overthinking.\n\n" +
+      "Par phir bhi… tum yahan tak aa gayi 💫"
+  },
+  {
+    title: "✨ Stronger Than You Think",
+    text:
+      "Tum shayad khud ko kam samajh leti ho,\n" +
+      "par sach ye hai — tum bohot strong ho 🤍"
+  },
+  {
+    title: "🫶 Ek baat yaad rakhna…",
+    text:
+      "Jab bhi lage ki koi samajh nahi raha,\n" +
+      "ya acha nahi lag raha ho,\n" +
+      "ya bas kisi se baat karne ka\n" +
+      "ya gussa nikaalne ka mann ho na…\n\n" +
+      "There is someone always for you 🤍\n" +
+      "Jo tumhari har baat sunega,\n" +
+      "har situation mein help karega."
+  },
+  {
+    title: "🎂 Welcome to 17",
+    text:
+      "Kam pressure.\nZyada smiles.\nAur thoda sa khud par bharosa 💖"
+  }
+];
+
+let slideIndex = 0;
+
+function showSlide(){
+  const titleEl = document.getElementById("slideTitle");
+  const textEl  = document.getElementById("slideText");
+  const btnEl   = document.getElementById("slideNextBtn");
+
+  titleEl.innerText = finalSlides[slideIndex].title;
+  textEl.innerHTML  = finalSlides[slideIndex].text.replace(/\n/g,"<br>");
+
+  // reset button text
+  btnEl.innerText = "Next ✨";
+
+  /* 🎆 FINAL SLIDE FIREWORKS */
+  if(slideIndex === finalSlides.length - 1){
+    btnEl.innerText = "Continue ✨";
+
+    // delay so slide is visible first
+    setTimeout(()=>{
+      bigCelebration();
+      rocketShow();
+    }, 300);
+  }
+}
+
+function nextSlide(){
+  if(slideIndex < finalSlides.length - 1){
+    slideIndex++;
+    showSlide();
+  }else{
+    go("s21");
+  }
+}
+
+function submitFeedback(){
+  const v = document.getElementById("qFeedback").value.trim();
+  if(!v){
+    alert("Sach sach likhna 😌");
+    return;
+  }
+
+  const fd = new FormData();
+  fd.append(ENTRY_FEEDBACK, v);
+
+  fetch(FORM_URL,{
+    method:"POST",
+    mode:"no-cors",
+    body:fd
+  });
+
+  go("s22");
+}
+
+/* ===== FINAL CELEBRATION ===== */
+function startFinalCelebration(){
+  bigCelebration();
+}
+
+</script>
+
+</body>
+</html>
